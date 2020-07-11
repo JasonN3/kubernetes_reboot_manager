@@ -90,7 +90,7 @@ $machinesRebooting = array();
 $nodeName = "";
 foreach($response["items"] as $machine)
 {
-    $phphash = hash_hmac("sha256", hexToStr($appID), hexToStr($machine["status"]["nodeInfo"]["machineID"]);
+    $phphash = hash_hmac("sha256", hexToStr($appID), hexToStr($machine["status"]["nodeInfo"]["machineID"]));
     $phphashp1 = substr($phphash, 0, 12);
     $phphashp2 = substr($phphash, 18, 14);
 

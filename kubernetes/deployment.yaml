@@ -21,7 +21,12 @@ rules:
   verbs:
   - get
   - list
-  - post
+- apiGroups:
+  - ""
+  resources:
+  - pods/eviction
+  verbs:
+  - create
 - apiGroups:
   - ""
   resources:
