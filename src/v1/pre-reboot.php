@@ -6,6 +6,9 @@
 
 $debug = false;
 
+# Set a default reponse code so any output will deny a reboot
+http_response_code(500);
+
 # Create stream context for API calls
 ## $verb = GET, POST, or PATCH
 ## $data = Body of request
@@ -99,9 +102,9 @@ foreach($response["items"] as $machine)
         $nodeName = $machine["metadata"]["name"];
         if($debug)
         {
-            echo $nodeName . "\r\n";
-            echo $machine["status"]["nodeInfo"]["machineID"] . "\r\n";
-            echo $machine["metadata"]["annotations"]["rebootmanager/status"] . "\r\n";
+            error_log($nodeName);
+            error_log($machine["status"]["nodeInfo"]["machineID"]);
+            error_log($machine["metadata"]["annotations"]["rebootmanager/status"]);
         }
         $machinesRebooting[] = $nodeName;
         continue;
@@ -117,14 +120,13 @@ if(count($machinesRebooting) > 1)
 {
     if($debug)
     {
-        echo "Multiple machines attempting to restart\r\n";
-        echo "Reboot delayed. Other nodes rebooting\r\n";
-        var_dump($machinesRebooting);
+        error_log("Multiple machines attempting to restart");
+        error_log("Reboot delayed. Other nodes rebooting");
     }
     $result = array("kind" => 'f1', "value" => 'other nodes rebooting');
-    echo json_encode($result);
     http_response_code(404);
-    exit();
+    echo json_encode($result);
+    die();
 }
 
 # Mark the node as rebooting
@@ -181,14 +183,14 @@ if($machinesRebooting[0] == $nodeName)
 {
     if($debug)
     {
-        echo "We're first in line. Continue with reboot preparations.\r\n";
+        error_log("We're first in line. Continue with reboot preparations.");
     }
 }
 else
 {
     if($debug)
     {
-        echo "Reboot delayed. Other nodes rebooting\r\n";
+        error_log("Reboot delayed. Other nodes rebooting");
     }
     # Remove rebooting annotation
     $data = array(
@@ -213,9 +215,9 @@ else
     }
     fclose($handle);
     $result = array("kind" => 'f1', "value" => 'other nodes rebooting');
-    echo json_encode($result);
     http_response_code(404);
-    exit();
+    echo json_encode($result);
+    die();
 }
 
 # Evict all nodes
@@ -238,7 +240,7 @@ foreach($response["items"] as $pod)
     {
         if($debug)
         {
-            echo "Evicting " . $pod["metadata"]["name"];
+            error_log("Evicting " . $pod["metadata"]["name"]);
         }
         $data = array(
             'apiVersion' => "policy/v1beta1",
@@ -276,13 +278,15 @@ foreach($response["items"] as $pod)
     {
         if($debug)
         {
-            echo "There are pods still running";
+            error_log("There are pods still running");
         }
         $result = array("kind" => 'f1', "value" => 'pods still evicting');
-        echo json_encode($result);
         http_response_code(404);
-        exit();
+        echo json_encode($result);
+        die();
     }
 }
 
+# Approve the reboot
+http_response_code(200);
 ?>
