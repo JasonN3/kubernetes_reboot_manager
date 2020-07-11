@@ -81,7 +81,7 @@ $id128hashp2 = substr($id128hash, 18, 14);
 # Find the node that made the request
 foreach($response["items"] as $machine)
 {
-    $phphash = hash_hmac("sha256", hexToStr($appID), hexToStr($machine["status"]["nodeInfo"]["machineID"]);
+    $phphash = hash_hmac("sha256", hexToStr($appID), hexToStr($machine["status"]["nodeInfo"]["machineID"]));
     $phphashp1 = substr($phphash, 0, 12);
     $phphashp2 = substr($phphash, 18, 14);
 
