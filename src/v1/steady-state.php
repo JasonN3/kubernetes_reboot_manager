@@ -2,7 +2,7 @@
 # steady-state.php
 # Called every 5 minutes by Zincati
 
-$debug = False;
+$debug = false;
 
 # Create stream context for API calls
 ## $verb = GET or PATCH
@@ -32,6 +32,16 @@ function getStreamContext($verb = 'GET', $data = null)
     return stream_context_create($opts);
 }
 
+# Convert a string of a hex to the ascii characters
+function hexToStr($hex){
+    $string='';
+    for ($i=0; $i < strlen($hex)-1; $i+=2){
+        $string .= chr(hexdec($hex[$i].$hex[$i+1]));
+    }
+    return $string;
+}
+
+
 # Read body from request
 # {
 #    "client_params": {
@@ -54,17 +64,28 @@ $url = $base . '/nodes';
 $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
-    throw new \Exception($e['message'], $e['type']);
+    error_log($e['message'], $e['type']);
 }
 $response = stream_get_contents($handle);
 fclose($handle);
 
 $response = json_decode($response, true);
 
+# App ID used to generate app specific machine ID
+$appID = "de35106b6ec24688b63afddaa156679b";
+# Only compare the first 12 and last 14 characters. The 13th and 17th characters sometimes come out wrong for the same input
+$id128hash = $request["client_params"]["id"];
+$id128hashp1 = substr($id128hash, 0, 12);
+$id128hashp2 = substr($id128hash, 18, 14);
+
 # Find the node that made the request
 foreach($response["items"] as $machine)
 {
-    if($machine["status"]["nodeInfo"]["machineID"] == $request["client_params"]["id"])
+    $phphash = hash_hmac("sha256", hexToStr($appID), hexToStr($machine["status"]["nodeInfo"]["machineID"]);
+    $phphashp1 = substr($phphash, 0, 12);
+    $phphashp2 = substr($phphash, 18, 14);
+
+    if($phphashp1 == $id128hashp1 && $phphashp2 == $id128hashp2)
     {
         $nodeName = $machine["metadata"]["name"];
         if($debug)
@@ -104,7 +125,7 @@ foreach($response["items"] as $machine)
                     $handle = fopen($url, 'r', false, $context);
                     if ($handle === false) {
                         $e = error_get_last();
-                        throw new \Exception($e['message'], $e['type']);
+                        error_log($e['message'], $e['type']);
                     }
                     $response = stream_get_contents($handle);
                     fclose($handle);
