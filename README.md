@@ -16,6 +16,10 @@ strategy = "fleet_lock"
 # Base URL for the FleetLock service.
 fleet_lock.base_url = "http://{{ Cluster-IP }}/"
 ```
+3. Restart Zincati on each of the nodes
+```bash
+sudo systemctl restart zincati
+```
 
 ## How it works
 ### Steady-State
