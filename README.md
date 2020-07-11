@@ -6,7 +6,7 @@
 kubectl apply -f kubernetes/deployment.yaml
 kubectl get -n reboot-manager svc/reboot-manager
 ```
-2. Go to each node and create the file /etc/zincati/config.d/reboot-manager.toml with the following content (replace {{ ClusterIP }} with the ClusterIP of the service in step 1):
+2. Go to each node and create the file /etc/zincati/config.d/reboot-manager.toml with the following content (replace {{ Cluster-IP }} with the Cluster-IP of the service in step 1):
 ```toml
 # How to finalize update.
 [updates]
@@ -14,7 +14,7 @@ kubectl get -n reboot-manager svc/reboot-manager
 strategy = "fleet_lock"
 
 # Base URL for the FleetLock service.
-fleet_lock.base_url = "https://{{ ClusterIP }}/"
+fleet_lock.base_url = "http://{{ Cluster-IP }}/"
 ```
 
 ## How it works
