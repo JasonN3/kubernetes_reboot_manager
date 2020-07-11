@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: reboot-manager
-        image: jasonn3/kubernetes-reboot-manager:latest
+        image: jasonn3/kubernetes_reboot_manager:latest
         ports:
         - name: http
           containerPort: 80
