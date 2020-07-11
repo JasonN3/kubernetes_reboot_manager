@@ -274,7 +274,7 @@ fclose($handle);
 $response = json_decode($response, true);
 foreach($response["items"] as $pod)
 {
-    if($pod["metadata"]["ownerReferences"][0]["kind"] != "DaemonSet")
+    if($pod["metadata"]["ownerReferences"][0]["kind"] != "DaemonSet" && $pod["metadata"]["ownerReferences"][0]["kind"] != "Node")
     {
         if($debug)
         {
