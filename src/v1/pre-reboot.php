@@ -75,6 +75,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    die();
 }
 $response = stream_get_contents($handle);
 fclose($handle);
@@ -150,6 +151,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    die();
 }
 fclose($handle);
 
@@ -162,6 +164,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    die();
 }
 $response = stream_get_contents($handle);
 fclose($handle);
@@ -213,6 +216,7 @@ else
     if ($handle === false) {
         $e = error_get_last();
         error_log($e['message'], $e['type']);
+        die();
     }
     fclose($handle);
     $result = array("kind" => 'f1', "value" => 'other nodes rebooting');
@@ -230,6 +234,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    die();
 }
 $response = stream_get_contents($handle);
 fclose($handle);
@@ -268,6 +273,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    die();
 }
 $response = stream_get_contents($handle);
 fclose($handle);

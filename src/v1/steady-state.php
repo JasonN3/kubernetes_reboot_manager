@@ -5,6 +5,9 @@
 
 $debug = false;
 
+# Set a default reponse code so any output will deny a reboot
+http_response_code(500);
+
 # Create stream context for API calls
 ## $verb = GET or PATCH
 ## $data = Body of request
@@ -66,6 +69,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    die();
 }
 $response = stream_get_contents($handle);
 fclose($handle);
@@ -91,8 +95,8 @@ foreach($response["items"] as $machine)
         $nodeName = $machine["metadata"]["name"];
         if($debug)
         {
-            echo $nodeName . "\r\n";
-            echo $machine["status"]["nodeInfo"]["machineID"] . "\r\n";
+            error_log($nodeName);
+            error_log($machine["status"]["nodeInfo"]["machineID"]);
         }
         foreach($machine["status"]["conditions"] as $condition)
         {
@@ -100,13 +104,13 @@ foreach($response["items"] as $machine)
             {
                 if($debug)
                 {
-                    echo "Node Ready\r\n";
+                    error_log("Node Ready");
                 }
                 if(!array_key_exists('rebootmanager/status', $machine["metadata"]["annotations"]) || $machine["metadata"]["annotations"]["rebootmanager/status"] != "Ready")
                 {
                     if($debug)
                     {
-                        echo "Marking node as done rebooting\r\n";
+                        error_log("Marking node as done rebooting");
                     }
                     $data = array(
                         'spec' => array(
@@ -127,10 +131,13 @@ foreach($response["items"] as $machine)
                     if ($handle === false) {
                         $e = error_get_last();
                         error_log($e['message'], $e['type']);
+                        die();
                     }
                     $response = stream_get_contents($handle);
                     fclose($handle);
                 }
+                # Sucessfully recorded that the node is online
+                http_response_code(200);
             }
         }
     }
