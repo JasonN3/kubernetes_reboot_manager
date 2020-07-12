@@ -1,6 +1,7 @@
 <?php
 # steady-state.php
-# Called every 5 minutes by Zincati
+# Called on startup by Zincati
+# https://github.com/coreos/zincati/blob/master/docs/images/zincati-fleetlock.png
 
 $debug = false;
 

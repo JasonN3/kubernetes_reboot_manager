@@ -1,5 +1,9 @@
 # kubernetes_reboot_manager
+## Summary
+This is a [Fleet Lock server](https://github.com/coreos/zincati/blob/master/docs/images/zincati-fleetlock.png) that Zincati can use to schedule reboots similar to [airlock](https://github.com/coreos/airlock). In addition to the standard locking provided by airlock, this server will evict the node of all pods before approving the reboot. All tracking is done using the Kubernetes API so an extra database is not required.
 
+Currently there are no configuration files for the server itself and only 1 node is allowed to reboot at a time regardless of its group.
+ 
 ## Installation
 1. Run the following commands
 ```bash
@@ -20,6 +24,7 @@ fleet_lock.base_url = "http://{{ Cluster-IP }}/"
 ```bash
 sudo systemctl restart zincati
 ```
+If you have any nodes intentionally set as unchedulable, you will need to set that flag again after Zincati checks in.
 
 ## How it works
 ### Steady-State

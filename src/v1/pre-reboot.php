@@ -1,6 +1,7 @@
 <?php
 # pre-reboot.php
 # Called before a reboot by Zincati
+# https://github.com/coreos/zincati/blob/master/docs/images/zincati-fleetlock.png
 # 404 = reboot denied
 # 200 = reboot approved
 
