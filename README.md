@@ -10,7 +10,7 @@ Currently there are no configuration files for the server itself and only 1 node
 kubectl apply -f kubernetes/deployment.yaml
 kubectl get -n reboot-manager svc/reboot-manager
 ```
-2. Go to each node and create the file /etc/zincati/config.d/reboot-manager.toml with the following content (replace {{ Cluster-IP }} with the Cluster-IP of the service in step 1):
+2. Go to each node and create the file /etc/zincati/config.d/reboot-manager.toml with the following content (replace {{ Ext-Service-IP }} with the External Service IP of the service in step 1. If one isn't assigned, edit the service so one will be assigned using your CNI):
 ```toml
 # How to finalize update.
 [updates]
@@ -18,7 +18,7 @@ kubectl get -n reboot-manager svc/reboot-manager
 strategy = "fleet_lock"
 
 # Base URL for the FleetLock service.
-fleet_lock.base_url = "http://{{ Cluster-IP }}/"
+fleet_lock.base_url = "http://{{ Ext-Service-IP }}/"
 ```
 3. Restart Zincati on each of the nodes
 ```bash
