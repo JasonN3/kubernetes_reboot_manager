@@ -256,7 +256,7 @@ foreach($response["items"] as $pod)
                 'namespace' => $pod["metadata"]["namespace"]
             )
         );
-        $url = $server . $pod["metadata"]["selfLink"] . '/eviction';
+        $url = $base . '/namespaces/' . $pod["metadata"]["namespace"] . '/pods/' . $pod["metadata"]["name"] . '/eviction';
         $context = getStreamContext("POST", $data);
         $handle = fopen($url, 'r', false, $context);
         # Don't worry about errors. If the evictions are submitted too fast, the API will deny some of them.
