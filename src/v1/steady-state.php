@@ -69,6 +69,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    flush();
     die();
 }
 $response = stream_get_contents($handle);
@@ -131,6 +132,7 @@ foreach($response["items"] as $machine)
                     if ($handle === false) {
                         $e = error_get_last();
                         error_log($e['message'], $e['type']);
+                        flush();
                         die();
                     }
                     $response = stream_get_contents($handle);
@@ -142,6 +144,6 @@ foreach($response["items"] as $machine)
         }
     }
 }
-
+flush();
 
 ?>
