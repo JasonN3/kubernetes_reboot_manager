@@ -75,6 +75,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    flush();
     die();
 }
 $response = stream_get_contents($handle);
@@ -128,6 +129,7 @@ if(count($machinesRebooting) > 1)
     $result = array("kind" => 'f1', "value" => 'other nodes rebooting');
     http_response_code(404);
     echo json_encode($result);
+    flush();
     die();
 }
 
@@ -151,6 +153,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    flush();
     die();
 }
 fclose($handle);
@@ -164,6 +167,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    flush();
     die();
 }
 $response = stream_get_contents($handle);
@@ -216,12 +220,14 @@ else
     if ($handle === false) {
         $e = error_get_last();
         error_log($e['message'], $e['type']);
+        flush();
         die();
     }
     fclose($handle);
     $result = array("kind" => 'f1', "value" => 'other nodes rebooting');
     http_response_code(404);
     echo json_encode($result);
+    flush();
     die();
 }
 
@@ -234,6 +240,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    flush();
     die();
 }
 $response = stream_get_contents($handle);
@@ -273,6 +280,7 @@ $handle = fopen($url, 'r', false, $context);
 if ($handle === false) {
     $e = error_get_last();
     error_log($e['message'], $e['type']);
+    flush();
     die();
 }
 $response = stream_get_contents($handle);
@@ -290,10 +298,12 @@ foreach($response["items"] as $pod)
         $result = array("kind" => 'f1', "value" => 'pods still evicting');
         http_response_code(404);
         echo json_encode($result);
+        flush();
         die();
     }
 }
 
 # Approve the reboot
 http_response_code(200);
+flush();
 ?>
