@@ -23,8 +23,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Get version numbers
+        run: |
+          echo "IMAGE_VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+          echo "IMAGE_MAJOR=$(expr match ${GITHUB_REF_NAME} 'v\([0-9]+\)\.[0-9+]'" >> $GITHUB_ENV
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: jasonn3/kubernetes_reboot_manager:latest,jasonn3/kubernetes_reboot_manager:${GITHUB_REF_NAME}
+          tags: jasonn3/kubernetes_reboot_manager:latest,jasonn3/kubernetes_reboot_manager:${{ env.IMAGE_VERSION }},jasonn3/kubernetes_reboot_manager:${{ env.IMAGE_MAJOR }}
