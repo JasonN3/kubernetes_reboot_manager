@@ -27,4 +27,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: jasonn3/kubernetes_reboot_manager:latest,jasonn3/kubernetes_reboot_manager:${{ GITHUB_REF_NAME }}
+          tags: jasonn3/kubernetes_reboot_manager:latest,jasonn3/kubernetes_reboot_manager:${GITHUB_REF_NAME}
